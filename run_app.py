@@ -149,6 +149,7 @@ back_button_callback(app)
 #Display incident info
 incident_info_callback(app, full_data_dict, data_index)
 
+
 app.title = "EuRepoC Cyber Incidents TableView"
 
 
