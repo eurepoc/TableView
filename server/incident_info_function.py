@@ -192,7 +192,6 @@ def get_responses_details(
 
 
 def create_modal_text(data=None, index=None, derived_virtual_data=None):
-
     id = derived_virtual_data["ID"]
     incident = data[index[int(id)]]
 
@@ -238,13 +237,15 @@ def create_modal_text(data=None, index=None, derived_virtual_data=None):
                      html.P([html.Span("End Date: ", style={"font-weight": "bold"}), f"{incident['end_date']}"]),
                      html.P([html.Span("Incident Type: ", style={"font-weight": "bold"}),
                              f"{'; '.join(list(set(incident['incident_type'])))}"]),
+                     html.P([html.Span("Operation Type: ", style={"font-weight": "bold"}),
+                             f"{incident['incident_type_clean']}"]),
                      html.P([html.Span("Source Incident Detection Disclosure: ", style={"font-weight": "bold"}),
                              f"{'; '.join(list(set(incident['source_incident_detection_disclosure'])))}"]),
                      html.P([html.Span("Inclusion Criteria: ", style={"font-weight": "bold"}),
                              f"{'; '.join(incident['inclusion_criteria'])}"]),
                      html.P([
                          html.Details([
-                            html.Summary("Sources URL: ", style={"font-weight": "bold"}),
+                            html.Summary(f"{len(sources_url_text)} Sources (click to expand): ", style={"font-weight": "bold"}),
                             html.Span([sources_url_text[i] for i in range(len(sources_url_text))])
                         ])
                      ]),
@@ -362,7 +363,7 @@ def create_modal_text(data=None, index=None, derived_virtual_data=None):
                     title="Legal Categories",
                     item_id="item-8",
                 ),
-            ], start_collapsed=True, always_open=False
+            ], start_collapsed=True, always_open=False, active_item="item-1"
         )
     ])
     return content

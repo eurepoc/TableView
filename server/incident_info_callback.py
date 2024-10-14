@@ -14,6 +14,7 @@ def incident_info_callback(app, data_dict, index):
         Output('datatable_info', 'children'),
         Output('general_info_incident', 'children'),
         Output('incident_radar', 'figure'),
+        Output('datatable_url', 'children'),
         [Input('datatable', 'data'),
          Input('datatable', 'selected_rows')]
     )
@@ -23,6 +24,7 @@ def incident_info_callback(app, data_dict, index):
 
             row_data = data[selected_rows[0]]
             incident_title = f'{row_data["name"]}'
+            incident_url = f'https://eurepoc.eu/table-view/?cyber_incident={row_data["ID"]}'
             general_info_text = create_modal_text(
                 data=data_dict,
                 index=index,
@@ -99,11 +101,12 @@ def incident_info_callback(app, data_dict, index):
                 margin=dict(l=0, r=0, t=25, b=25, pad=0),
                 dragmode=False
             )
-            return incident_title, general_info_text, fig
+            return incident_title, general_info_text, fig, incident_url
 
         else:
 
             incident_title = ""
+            incident_url = ""
             general_info_text = html.Span([
                     html.I(
                         className="fa-solid fa-arrow-pointer",
@@ -162,4 +165,4 @@ def incident_info_callback(app, data_dict, index):
                 dragmode=False
             )
 
-            return incident_title, general_info_text, fig
+            return incident_title, general_info_text, fig, incident_url

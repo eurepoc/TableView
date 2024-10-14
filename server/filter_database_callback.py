@@ -148,6 +148,17 @@ def database_filter(app, dataframe, states_codes, search_func, validation_func):
                         ascending=sort_by[0]['direction'] == 'asc',
                         inplace=False
                 )
+                      
+                tooltip_data = [{column: {'value': str(value), 'type': 'markdown'}
+                         for column, value in row.items() if column not in ['initiator_name', 'receiver_name',
+                             'context', 'start_date', "number_of_attributions", "number_of_political_responses",
+                             "number_of_legal_responses", "zero_days", "radar_score_impact",
+                             "radar_score_intensity", "radar_score_political", "radar_score_legal",
+                             "radar_score_offline_conflict", "radar_score_attribution",
+                             "legal_response_country", "impact_indicator", "weighted_cyber_intensity"]
+                         }
+                        for row in dff.to_dict('records')]
+                
             else:
                 # No sort is applied
                 dff = data

@@ -15,14 +15,58 @@ import faiss
 from sentence_transformers import SentenceTransformer
 import bleach
 
+def clean_types(data):
+    """Adding a variable cleaning the incident types to a "one-level" category for more meaningful analyses."""
+    def translate_type(types):
+        types = [t for t in types if isinstance(t, str)]
+
+        type_mapping = {
+            "Disruption": "DDoS/Defacement",
+            "Data theft": "Data theft",
+            "Data theft & Doxing": "Hack and leak",
+            "Ransomware": "Ransomware"
+        }
+
+        sorted_types = sorted(types)
+
+        if len(sorted_types) == 1:
+            return type_mapping.get(sorted_types[0], sorted_types[0])
+        elif len(sorted_types) == 2 and "Disruption" in sorted_types and "Hijacking with Misuse" in sorted_types:
+            return "Wiper"
+        elif len(sorted_types) > 1 and "Ransomware" in sorted_types:
+            return "Ransomware"
+        elif len(
+                sorted_types) == 2 and "Data theft" in sorted_types and "Hijacking with Misuse" in sorted_types or "Hijacking without Misuse" in sorted_types:
+            return "Data theft"
+        else:
+            return list(sorted_types)
+
+    for incident in data:
+        incident["incident_type_clean"] = translate_type(incident["incident_type"])
+
+    for incident in data:
+        if not isinstance(incident["incident_type_clean"], str):
+            if "Data theft & Doxing" in incident["incident_type_clean"]:
+                incident["incident_type_clean"] = "Hack and leak"
+            elif "Data theft" in incident["incident_type_clean"]:
+                incident["incident_type_clean"] = "Data theft"
+            else:
+                incident["incident_type_clean"] = "Other"
+    return data
+
+
 # ------------------------------------------------- READ DATA ---------------------------------------------------------
 eurepoc_data = pd.read_csv("./data/eurepoc_dataset.csv")
 eurepoc_data = eurepoc_data.set_index(eurepoc_data["ID"])
+
+
 data_for_download = pd.read_csv("./data/eurepoc_dataset_download.csv")
 
 full_data_dict = pickle.load(open("./data/full_data_dict.pickle", "rb"))
 data_index = pickle.load(open("./data/full_data_dict_index_map.pickle", "rb"))
 
+full_data_dict = clean_types(full_data_dict)
+print(full_data_dict[0])
 
 # Load the existing FAISS index and DataFrame
 index = faiss.read_index("./data/eurepoc_index.index")

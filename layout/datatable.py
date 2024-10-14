@@ -143,7 +143,16 @@ body = dbc.Col(
                 dbc.Row([
                     dbc.Col([
                         dbc.Row([
-                            html.Div(html.H4("Information coded in the database", style={'font-size': '1.3rem'}))
+                            html.Div([ html.I(
+                                    className="fa-solid fa-share",
+                                    style={
+                                        'font-size': '1rem',
+                                        "display": "inline-block",
+                                        "margin-right": "5px",
+                                        'color': '#CC0130'
+                                    }
+                                ), html.I(id='datatable_url', style={'display': 'inline-block', 'margin-right': '10px'})]),
+                            html.Div(html.H4("Information coded in the database", style={'font-size': '1.3rem'})),
                         ], style={'margin-bottom': '20px'}),
                         dbc.Row([
                             html.Div(id="general_info_incident"),
