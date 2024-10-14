@@ -66,7 +66,6 @@ full_data_dict = pickle.load(open("./data/full_data_dict.pickle", "rb"))
 data_index = pickle.load(open("./data/full_data_dict_index_map.pickle", "rb"))
 
 full_data_dict = clean_types(full_data_dict)
-print(full_data_dict[0])
 
 # Load the existing FAISS index and DataFrame
 index = faiss.read_index("./data/eurepoc_index.index")

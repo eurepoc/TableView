@@ -160,6 +160,9 @@ body = dbc.Col(
                     ], xs=12, sm=12, md=12, lg=6, xl=6, xxl=6, style={'padding-right': '25px', 'padding-left': '25px', 'margin-top': '20px'}),
                     dbc.Col([
                         dbc.Row([
+                            html.Div(html.I("Comparative"),  style={
+                                        "display": "inline-block",
+                                    }),
                             html.Div(html.H4("Incident assessment", style={'font-size': '1.3rem'}))
                         ], style={'margin-bottom': '20px'}),
                         dbc.Row([
