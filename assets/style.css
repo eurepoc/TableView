@@ -1,0 +1,4 @@
+.quality-switch > .form-check-input:checked {
+    background-color: #CC0130; /* Change this to your preferred color */
+    border-color: #CC0130; /* Optional: Match the border color */
+}

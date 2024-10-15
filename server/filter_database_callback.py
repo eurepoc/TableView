@@ -37,6 +37,7 @@ def database_filter(app, dataframe, states_codes, search_func, validation_func):
         Input(component_id='il_breach_dd', component_property='value'),
         Input(component_id='date-picker-range', component_property='start_date'),
         Input(component_id='date-picker-range', component_property='end_date'),
+        Input(component_id="quality-switch", component_property="value"),
         Input('datatable', "page_current"),
         Input('datatable', "page_size"),
         Input('datatable', "sort_by")
@@ -64,11 +65,11 @@ def database_filter(app, dataframe, states_codes, search_func, validation_func):
             il_breach_filter,
             start_date_start,
             start_date_end,
+            show_only_sent_to_database,
             page_current,
             page_size,
             sort_by
     ):
-
         filtered_data_initial = dataframe
 
         type_filter = validation_func(type_filter)
@@ -139,7 +140,8 @@ def database_filter(app, dataframe, states_codes, search_func, validation_func):
                 il_breach_filter,
                 states_codes,
                 filtered_data_initial,
-                search_func
+                search_func,
+                show_only_sent_to_database
             )
 
             if len(sort_by):
@@ -149,15 +151,6 @@ def database_filter(app, dataframe, states_codes, search_func, validation_func):
                         inplace=False
                 )
                       
-                tooltip_data = [{column: {'value': str(value), 'type': 'markdown'}
-                         for column, value in row.items() if column not in ['initiator_name', 'receiver_name',
-                             'context', 'start_date', "number_of_attributions", "number_of_political_responses",
-                             "number_of_legal_responses", "zero_days", "radar_score_impact",
-                             "radar_score_intensity", "radar_score_political", "radar_score_legal",
-                             "radar_score_offline_conflict", "radar_score_attribution",
-                             "legal_response_country", "impact_indicator", "weighted_cyber_intensity"]
-                         }
-                        for row in dff.to_dict('records')]
                 
             else:
                 # No sort is applied
@@ -165,6 +158,17 @@ def database_filter(app, dataframe, states_codes, search_func, validation_func):
 
             nb_incidents = f"- showing {len(data)}/{len(filtered_data_initial)} cyber incidents"
 
+
+            tooltip_data = [{column: {'value': str(value), 'type': 'markdown'}
+                         for column, value in row.items() if column not in ['initiator_name', 'receiver_name',
+                             'context', 'start_date', "number_of_attributions", "number_of_political_responses",
+                             "number_of_legal_responses", "zero_days", "radar_score_impact",
+                             "radar_score_intensity", "radar_score_political", "radar_score_legal",
+                             "radar_score_offline_conflict", "radar_score_attribution",
+                             "legal_response_country", "impact_indicator", "weighted_cyber_intensity"]
+                         }
+                        for row in dff.iloc[page_current*page_size:(page_current+ 1)*page_size].to_dict('records')]
+            
             return nb_incidents, \
                 dff.iloc[page_current*page_size:(page_current+ 1)*page_size].to_dict('records'), \
                 tooltip_data, \

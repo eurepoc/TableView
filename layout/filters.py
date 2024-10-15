@@ -464,11 +464,16 @@ def render_filters():
                                             },
                                         ),
                                         *make_break(1),
+                                        dbc.Row([  # Wrap the switch in a Row to control alignment
+                                            dbc.Col([
+                                                dbc.Switch(id="quality-switch", value=False, label="Show only incidents fully reviewed by our experts", style={'text-align': 'center', "margin-top": "10px"}, className="quality-switch"),
+                                            ], width={"size": "auto"})  # Adjust width or use 'auto' for flexibility
+                                        ], justify="center"),
                                         dbc.Button("Reset selection", id="reset", className="mb-3", n_clicks=0,
-                                                   color="light")
+                                                color="light"),
                                     ], style={'text-align': 'center', "margin-bottom": "10px"}),
                                 ]),
-                            ]),
+                            ])
                         ]),
                     ]),
                 ])

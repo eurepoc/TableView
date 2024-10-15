@@ -35,7 +35,12 @@ def filter_datatable(
     states_codes,
     filtered_data_initial,
     search_func,
+    show_only_sent_to_database
 ):
+    
+    if show_only_sent_to_database:
+        filtered_data_initial = filtered_data_initial.loc[(filtered_data_initial["status"] != "Open")]
+        print(filtered_data_initial.head(2))
     if start_date_start == "2000-01-01" and start_date_end == str(dt.now().date()):
         start_date = None
         end_date = None
